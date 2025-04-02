@@ -38,7 +38,7 @@ void dequeue(cQueue* cQueue);
 
 cQueue* createCircularQueue() {
     cQueue* pCQueue = NULL;
-    int i;
+    int i; //이새낀 왜있음?
 
     pCQueue = (cQueue*)malloc(sizeof(cQueue));
     pCQueue->front = 0;
@@ -48,19 +48,47 @@ cQueue* createCircularQueue() {
 }
 
 void showQueue(cQueue* cQueue) {
-
+    int i;
+    if (isEmpty(cQueue) == TRUE) {
+        printf("Circular Queue is Empty!\n");
+        return;
+    }
+    printf("========show queue========\n");
+    for (i = cQueue->front + 1; i != cQueue->rear; i = (i+1)%Capacity) {
+        printf("[%d]\n", cQueue->data[i]);
+    }
+    printf("[%d]\n", cQueue->data[i]);
+    printf("==========================\n");
 }
 
 void enqueue(cQueue* cQueue, int data) {
-
+    if (isFull(cQueue) == TRUE) {
+        printf("Circular Queue is full!\n");
+        return;
+    }
+    //Circular Queue의 뒷 부분에 data 추가
+    cQueue->rear += 1;
+    cQueue->rear %= Capacity;
+    cQueue->data[cQueue->rear] = data;
 }
 
-void dequeue(cQueue* cQueue, int data) {
-
+void dequeue(cQueue* cQueue) {
+    if (isEmpty(cQueue)) {
+        printf("Circular Queue is Empty!\n");
+        return;
+    }
+    //Circular Queue의 앞 부분을 다음 칸으로 이동
+    cQueue->front += 1;
+    cQueue->front %= Capacity;
+    return;
 }
 
 int isFull(cQueue* cQueue) {
-
+    if ((cQueue->rear + 1) % Capacity == cQueue->front) {
+        return TRUE;
+    } else  {
+        return FALSE;
+    }
 }
 //front와 rear가 같을 때 우리는 empty로 정의했기에
 //꽉 찼을 때의 확인법이 front == rear가 아님
@@ -89,7 +117,7 @@ int main() {
     showQueue(cQueue);
     printf("front: %d, rear: %d\n", cQueue->front, cQueue->rear);
 
-    pritnf("dequeue\n");
+    printf("dequeue\n");
     printf("dequeue\n");
     dequeue(cQueue);
     dequeue(cQueue);
@@ -104,6 +132,7 @@ int main() {
     printf("front: %d, rear: %d\n", cQueue->front, cQueue->rear);
     printf("enqueue data 60\n");
     enqueue(cQueue, 60);
+    showQueue(cQueue);
     printf("front: %d, rear: %d\n", cQueue->front, cQueue->rear);
     printf("enqueue data 70\n");
     enqueue(cQueue, 70);
