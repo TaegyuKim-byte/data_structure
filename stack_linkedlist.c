@@ -52,11 +52,19 @@ void pushLinkedStack(StackNode** top, int data) {
 
     pNewNode = (StackNode*)malloc(sizeof(StackNode));
     pNewNode->data = data;
-
+    pNewNode->nextNode = NULL;
+    /*
     if (*top == NULL) {
         *top = pNewNode;
     } else {
         pNewNode->nextNode = top;
+        *top = pNewNode;
+    } 내가 쓴 것
+    */
+    if (isEmpty(*top)) {
+        *top = pNewNode;
+    } else {
+        pNewNode->nextNode = *top;
         *top = pNewNode;
     }
 }
@@ -67,11 +75,33 @@ StackNode* popLinkedStack(StackNode** top) {
     if (*top == NULL) {
         return *top;
     } else {
-        
-
+        pNode = *top;
+        *top = (*top)->nextNode;
     }
 
     return pNode;
+}
+
+StackNode* topLinkedStack(StackNode* top) {
+    StackNode *pNode = NULL;
+
+    if (!isEmpty(top)) {
+        pNode = top;
+    }
+    return pNode;
+}
+
+void deleteLinkedStack(StackNode** top) {
+    StackNode *pNode = NULL, *pDelNode = NULL;
+    pNode = *top;
+
+    while (pNode != NULL) {
+        pDelNode = pNode;
+        pNode = pNode->nextNode;
+        free(pDelNode);
+    }
+
+    *top = NULL;
 }
 
 int main() {
