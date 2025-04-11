@@ -13,6 +13,7 @@ typedef struct Node {
 typedef struct LinkedList {
 	int curCount; //현재 이 List에 들어있는 노드 개수
 	Node headNode; //List의 시작 Node (포인터가 아니네?)
+                   //가 아니라 시작노드를 가리키는 포인터를 가지고있기 위한 용도로만 쓰이는 놈. 
 }LinkedList;
 
 //typedef가 없으면 struct Node, struct LinkedList로 계속 써야됨
@@ -54,12 +55,14 @@ int addNode(LinkedList* pList, int pos, int data)
     for (int i = 0; i < pos; i++)
     //여기서 pos-1이 아닌 이유
     //처음 pTmpNode는 인덱스 0이 아니라 그 앞의 headNode라서
+    //n번 이동하면 pTmpNode는 [n-1]에 있음
         pTmpNode = pTmpNode->nextNode;
 
     pNewNode->nextNode = pTmpNode->nextNode;
     pTmpNode->nextNode = pNewNode;
 
     pList->curCount++;
+    //연산자 우선순위 암기
 
     return TRUE;
 }
@@ -195,3 +198,150 @@ int main() {
 
     return 0;
 }
+/*
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TRUE 1
+#define FALSE -1
+
+typedef struct Node {
+    int data;
+    struct Node* nextNode;
+}Node;
+
+typedef struct LinkedList {
+    int curCount;
+    Node headNode;
+}LinkedList;
+
+int addNode(LinkedList* plist, int pos, int data);
+int removeNode(LinkedList* plist, int pos);
+int showLinkedList(LinkedList* plist);
+int isEmpty(LinkedList* plist);
+int findPos(LinkedList* plist, int data);
+void makeEmpty(LinkedList* plist);
+
+int addNode(LinkedList* plist, int pos, int data) {
+    //위치 검사
+    if (pos > plist->curCount || pos < 0) {
+        printf("Error! wrong position\n");
+        return FALSE;
+    }
+    
+    //새로운 노드 생성
+    Node* pNewNode = (Node*)malloc(sizeof(Node));
+    pNewNode->data = data;
+    pNewNode->nextNode = NULL;
+    
+    //직전 노드까지 이동
+    Node* pTmpNode = &(plist->headNode);
+    for (int i = 0; i < pos; i++) {
+        pTmpNode = pTmpNode->nextNode;
+    }
+    
+    //link 변경
+    pNewNode->nextNode = pTmpNode->nextNode;
+    pTmpNode->nextNode = pNewNode;
+    
+    (plist->curCount)++;
+    return TRUE;
+}
+
+int removeNode(LinkedList* plist, int pos) {
+    //pos 검사
+    if (pos >= plist->curCount || pos < 0) {
+        printf("Error! wrong position");
+        return FALSE;
+    }
+    
+    //직전 노드까지 이동
+    Node* pTmpNode = &(plist->headNode);
+    Node* pDelNode = NULL;
+    for (int i = 0; i < pos; i++) {
+        pTmpNode = pTmpNode->nextNode;
+    }
+    pDelNode = pTmpNode->nextNode;
+    
+    //link 변경
+    pTmpNode->nextNode = pDelNode->nextNode;
+    
+    //free!
+    free(pDelNode);
+    
+    (plist->curCount)--;
+    return TRUE;
+}
+
+int isEmpty(LinkedList* plist) {
+    return plist->headNode.nextNode == NULL;   
+}
+
+int findPos(LinkedList* plist, int data) {
+    Node* pTmpNode = plist->headNode.nextNode;
+    int n = 0;
+    while (pTmpNode != NULL) {
+        if (pTmpNode->data == data) 
+            return n;
+        pTmpNode = pTmpNode->nextNode;
+        n++;
+    }
+    
+    return FALSE;
+}
+
+void makeEmpty(LinkedList* plist) {
+    Node* pTmpNode = plist->headNode.nextNode;
+    Node* pDelNode = NULL;
+    
+    while (pTmpNode != NULL) {
+        pDelNode = pTmpNode;
+        pTmpNode = pDelNode->nextNode;
+        free(pDelNode);
+    }
+    
+    plist->headNode.nextNode = NULL;
+    plist->curCount = 0;
+}
+
+int showNode(LinkedList* plist) {
+    printf("현재 노드 개수: %d\n", plist->curCount);
+    
+    Node* pTmpNode = plist->headNode.nextNode;
+    
+    for (int i = 0; i < plist->curCount; i++) {
+        printf("[%d]\n", pTmpNode->data);
+        pTmpNode = pTmpNode->nextNode;
+    }
+    printf("----------------\n");
+}
+
+int main() {
+    int pos;
+    LinkedList* linkedList = (LinkedList*)malloc(sizeof(LinkedList));
+    linkedList->curCount = 0;
+    linkedList->headNode.nextNode = NULL;
+    //nextNode를 초기화?
+    //headNode의 값은 없고 주소만 NULL로 해줌
+
+    showNode(linkedList);
+    addNode(linkedList, 0, 10);
+    addNode(linkedList, 5, 100);
+    addNode(linkedList, 1, 20);
+    addNode(linkedList, 2, 30);
+    addNode(linkedList, 1, 50);
+
+    showNode(linkedList);
+
+    removeNode(linkedList, 1);
+    showNode(linkedList);
+
+    pos = findPos(linkedList, 30);
+    printf("the location of node with data '30': %d\n", pos);
+
+    makeEmpty(linkedList);
+    showNode(linkedList);
+
+    return 0;
+}
+*/
