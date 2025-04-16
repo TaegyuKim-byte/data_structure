@@ -25,8 +25,8 @@ void clearPoly(poly* A) {
 
     while (pTmpTerm != NULL) {
         pTmp2Term = pTmpTerm;
-        free(pTmpTerm);
         pTmpTerm = pTmpTerm->nextNode;
+        free(pTmp2Term);
     }
 
     A->headNode.nextNode = NULL;
