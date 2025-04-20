@@ -11,7 +11,7 @@ typedef struct Node {
 
 typedef struct Queue {
     Node* frontPtr;
-    Node* rearPtr; 
+    Node* rearPtr;
 }Queue;
 
 Queue* createLinkedListQueue();
@@ -86,6 +86,7 @@ void dequeue(Queue* lQueue) {
     pTmpNode->nextNode = NULL;
 }
 
+/*
 void showQueue(Queue* lQueue) {
     Node* pTmpNode = NULL;
 
@@ -99,6 +100,27 @@ void showQueue(Queue* lQueue) {
         printf("<exit>\n");
         while (pTmpNode != NULL) {
             printf("[%d]\n", pTmpNode->data);
+            pTmpNode = pTmpNode->nextNode;    
+        }
+        printf("<entrance>\n");
+        printf("==========================\n");
+    }
+}
+*/
+
+void showQueue(Queue* lQueue) {
+    Node* pTmpNode = NULL;
+    
+    if (isEmpty(lQueue)) {
+        printf("========show queue========\n");
+        printf("Queue is empty!\n");
+        printf("==========================\n");
+    } else {
+        pTmpNode = lQueue->rearPtr;
+        printf("========show queue========\n");
+        printf("<exit>\n");
+        while (pTmpNode != NULL) {
+            
             pTmpNode = pTmpNode->nextNode;    
         }
         printf("<entrance>\n");
