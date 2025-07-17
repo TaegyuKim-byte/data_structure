@@ -151,6 +151,8 @@ void reverseList(LinkedList* plist, StackNode** top) {
     while(*top != NULL) {
         sNode = *top;
         *top = (*top)->nextNode;
+
+        //빈 리스트인지 아닌지에 따라 다르게 작업
         if (plist->headNode.nextNode == NULL) {
             plist->headNode.nextNode = sNode->data;
             pNode = plist->headNode.nextNode;
@@ -161,6 +163,8 @@ void reverseList(LinkedList* plist, StackNode** top) {
             pNode->nextNode = NULL;
         }
 
+        //Stack에 list를 저장할때 만든 동적할당 스택 구조체를 
+        //while문 내부에서 해제제
         free(sNode);
     }
 

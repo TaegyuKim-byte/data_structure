@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//Dictionary 구조
 typedef struct Node {
     int key;
     int value;
@@ -16,6 +17,7 @@ void threeWayJoin(Node* mid, Node* small, Node* big);
 void splitTree(Node* root, int key, Node** small, Node** mid, Node** big);
 
 void insertTreeNode(Node** p, int key, int value) {
+    // 노드가 NULL인 경우
     if ((*p) == NULL) {
         (*p) = (Node*)malloc(sizeof(Node));
         (*p)->key = key;
@@ -24,16 +26,20 @@ void insertTreeNode(Node** p, int key, int value) {
         (*p)->rightChild = NULL;
     } 
 
+    // leftChild로 들어가는 경우 (key값 비교)
     else if ((*p)->key > key) {
         insertTreeNode(&((*p)->leftChild), key, value);
     }
 
+    // rightChild로 들어가는 경우 (key값 비교)
     else {
         insertTreeNode(&((*p)->rightChild), key, value);
     }
 }
 
 void printTreeInorder(Node* p) {
+    // parameter로 들어온 변수가 가리키는 값이 뭔지에 따라 분류
+    // null이면 없는거니까 그냥 함수 종료
     if (p == NULL) return;
 
     printTreeInorder(p->leftChild);
@@ -48,6 +54,7 @@ void deleteTreeNode(Node** p, int key) {
     Node* successor = NULL;
     Node* successorParent = NULL;
 
+    //key값에 일치하는 노드에 접근
     while (pNode != NULL && pNode->key != key) {
         pParent = pNode;
         if (key < pNode->key) {
@@ -138,6 +145,7 @@ void splitTree(Node* root, int key, Node** small, Node** mid, Node** big) {
 
 int main() {
     Node* pParentNode = NULL;
+
     insertTreeNode(&pParentNode, 15, 100);
     insertTreeNode(&pParentNode, 10, 200);
     insertTreeNode(&pParentNode, 20, 300);
